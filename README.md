@@ -4,54 +4,41 @@ Softbook is a modern social network website designed to connect people, foster m
 
 ## Features
 
-Key Features
-🌐 User Profiles
-Users can create and customize their profiles with profile pictures, bio, and personal details.
+- User Profiles
+  Users can create and customize their profiles with profile pictures, bio, and personal details.
+  Option to update profile information and privacy settings.
 
-Option to update profile information and privacy settings.
+- Posts and Feeds
+  Create text, image, and video posts.
+  Engage with other users’ posts through likes, comments, and shares.
+  Real-time updates in the feed using Socket.IO.
 
-📝 Posts and Feeds
-Create text, image, and video posts.
+- Friends and Connections
+  Send and accept friend requests.
+  Follow and unfollow users.
+  View mutual friends and recommended connections.
 
-Engage with other users’ posts through likes, comments, and shares.
+- Messaging
+  Real-time direct messaging with typing indicators and read receipts.
+  Group chats and message history.
+  Option to send images and emojis in chats.
 
-Real-time updates in the feed using Socket.IO.
+- Notifications
+  Real-time notifications for likes, comments, friend requests, and messages.
+  Option to customize notification preferences.
 
-👥 Friends and Connections
-Send and accept friend requests.
+- Search and Discovery
+  Advanced search to find users, posts, and hashtags.
+  Discover trending content and suggested users.
 
-Follow and unfollow users.
+- Privacy and Security
+  Role-Based Access Control (RBAC) to manage user roles and permissions.
+  Secure login and authentication using JWT with refresh tokens.
+  Option to block or report users.
 
-View mutual friends and recommended connections.
-
-💬 Messaging
-Real-time direct messaging with typing indicators and read receipts.
-
-Group chats and message history.
-
-Option to send images and emojis in chats.
-
-🔔 Notifications
-Real-time notifications for likes, comments, friend requests, and messages.
-
-Option to customize notification preferences.
-
-🔎 Search and Discovery
-Advanced search to find users, posts, and hashtags.
-
-Discover trending content and suggested users.
-
-🎯 Privacy and Security
-Role-Based Access Control (RBAC) to manage user roles and permissions.
-
-Secure login and authentication using JWT with refresh tokens.
-
-Option to block or report users.
-
-📊 Analytics and Insights
-Dashboard for users to track post engagement and profile visits.
-
-Admin panel to manage user activities and content moderation.
+- Analytics and Insights
+  Dashboard for users to track post engagement and profile visits.
+  Admin panel to manage user activities and content moderation.
 
 ## Tech Stack
 
