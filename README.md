@@ -6,8 +6,9 @@ Softbook is a modern social network website designed to connect people, foster m
 
 User Profiles
 
-- Users can create and customize their profiles with profile pictures, bio, and personal details.
-- Option to update profile information and privacy settings.
+- Users can create profile
+- Users can customize their profiles with profile pictures, bio, and personal details.
+- Users can delete their profile
 
 Posts and Feeds
 
@@ -50,4 +51,20 @@ Analytics and Insights
 
 ## Tech Stack
 
+- Node.js
+- Express.js
+- dotenv
+- mongoose
+- nodemon
+
 ## API Endpoints
+
+Users
+
+- /api/v1/user/create
+- /api/v1/user/getall
+- /api/v1/user/get/:id
+- /api/v1/user/delete/:id
+- /api/v1/user/update/:id
+
+## Security Considerations
