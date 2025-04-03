@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [
     "node.js",
@@ -17,9 +17,12 @@
   "author": "softbook admin",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.13.0",
+    "multer": "^1.4.5-lts.2",
     "nodemon": "^3.1.9"
   }
 }
