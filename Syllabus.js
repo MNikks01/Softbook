@@ -47,12 +47,12 @@
 // // 9. crypto -> encryption (bcryptjs done)
 // 10. buffer -> memory management
 // 11. util -> utility like inheritance, logging
-// 12. events -> event driven architecture
+// 12. events -> event driven architecture (event emitter)
 // 13. worker_threads -> multi-threading
 
 // THIRD PARTY MODULES/LIBRARIES
 // // 1. express -> web framework for building servers, REST, middlewares
-// 2. mongoose -> mongoDB ORM
+// // 2. mongoose -> mongoDB ORM
 // // 3. bcrypt -> password hashing
 // 4. jsonwebtoken -> token based authentication
 // 5. axios -> HTTP client
@@ -92,3 +92,4 @@
 // MICRO-SERVICES
 // RBAC -> role based access control
 // Payment Gateway (Stripe, Paypal, Razorpay)
+// SSR -> server side rendering (using ejs)

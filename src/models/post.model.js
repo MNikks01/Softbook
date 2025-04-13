@@ -1,19 +1,25 @@
 
 import mongoose from 'mongoose'
 
-const postSchema = new mongoose.Schema({
-    postCaption: {
-        type: String,
-        trim: true
+const postSchema = new mongoose.Schema(
+    {
+        postCaption: {
+            type: String,
+            trim: true
+        },
+        postImage: {
+            type: String,
+            required: true
+        },
+        postBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
     },
-    postImage: {
-        type: String,
-        required: true
-    },
-    postVideo: {
-        type: String,
-    },
-})
+    {
+        timestamps: true
+    }
+)
 
 const Post = mongoose.model('Post', postSchema)
 export default Post

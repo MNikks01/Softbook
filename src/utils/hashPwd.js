@@ -1,22 +1,28 @@
 
 import bcrypt from "bcryptjs";
 
-const saltRounds = 10;
-
 const hashPassword = async (inputPassword) => {
+    const saltRounds = 10;
 
-    let hashedPassword = await bcrypt.hash(
-        inputPassword,
-        saltRounds,
-        async (err, hash) => {
-            if (err) console.log('error', err);
-            console.log('hashed password', hash);
-            // hashPassword = hash
-        }
-    );
-
-
-    return hashedPassword
+    try {
+        let hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
+        return hashedPassword
+    } catch (error) {
+        return error
+    }
 }
 
-export default hashPassword
+const verifyPwd = (inpPwd, hashedPwd) => {
+    try {
+        bcrypt.verify(inpPwd, hashedPwd, (err, isMatch) => {
+            if (err) {
+                return false
+            }
+            return isMatch
+        })
+    } catch (error) {
+        return false
+    }
+}
+
+export { hashPassword, verifyPwd }

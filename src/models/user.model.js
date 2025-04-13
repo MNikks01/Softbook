@@ -37,8 +37,9 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     avatar: String,
-    DOB: Date
-})
+    DOB: Date,
+    hashedPwd: String
+}, { timestamps: true })
 
 const User = mongoose.model('User', userSchema)  // User is the name of the collection
 export default User
