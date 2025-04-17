@@ -56,6 +56,9 @@ Analytics and Insights
 - dotenv
 - mongoose
 - nodemon
+- jsonwebtoken
+- cloudinary
+- bcryptjs
 
 ## API Endpoints
 
