@@ -1,9 +1,10 @@
 import fs from "fs";
 import uploadOnCloudinary from "../config/cloudinary.js";
 import User from "../models/user.model.js";
-import { hashPassword, verifyPwd } from "../config/bcrypt.js";
+import { hashPassword, verifyPwd } from "../utils/hashPwd.js";
+import { generateToken } from "../utils/jwt.js";
 
-// DONE
+// DONE and Tested
 const createuser = async (req, res) => {
     // 1. check for input (name, email, password, mobile, gender)
     // 2. check for password length
@@ -103,17 +104,16 @@ const createuser = async (req, res) => {
     }
 }
 
-// DONE
-const getallusers = (req, res) => {
+// DONE and tested
+const getallusers = async (req, res) => {
     try {
-        const users = User.find()
+        const users = await User.find({}).select('-hashedPwd -__v -password')
         if (!users)
             res.status(400)
                 .json({
                     success: false,
                     message: "no users found"
                 })
-
         res.status(200)
             .json({
                 success: true,
@@ -121,15 +121,18 @@ const getallusers = (req, res) => {
                 users: users
             })
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
     }
 }
 
-// DONE
-const getuser = (req, res) => {
+// DONE and tested
+const getuser = async (req, res) => {
     const { id } = req.params
     try {
-        const user = User.findById(id)
+        const user = await User.findById(id).select('-hashedPwd -__v -password')
         // const user = User.findOne({ _id: id })
         if (!user)
             res.status(400)
@@ -145,15 +148,18 @@ const getuser = (req, res) => {
                 user: user
             })
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
     }
 }
 
-// DONE
-const deleteuser = (req, res) => {
+// DONE and tested
+const deleteuser = async (req, res) => {
     const { id } = req.params
     try {
-        const user = User.findByIdAndDelete(id)
+        const user = await User.findByIdAndDelete(id)
         // const user = User.deleteOne({ _id: id })
         if (!user)
             res.status(400)
@@ -161,7 +167,6 @@ const deleteuser = (req, res) => {
                     success: false,
                     message: "user not found"
                 })
-
         res.status(200)
             .json({
                 success: true,
@@ -169,19 +174,48 @@ const deleteuser = (req, res) => {
                 user: user
             })
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
     }
 }
 
-const verifyUser = (req, res) => {
-    // business logic for verifying a user
-    res.send('user verified successfully');
+// DONE and tested
+const verifyUser = async (req, res) => {
+    const { id } = req.params
+    try {
+        const user = await User.findById(id)
+        if (!user)
+            res.status(400)
+                .json({
+                    success: false,
+                    message: "user not found"
+                })
+
+        const updatedUser = await User.findByIdAndUpdate(id, { isVerified: true })
+        // const updatedUser = await User.updateOne({ _id: id }, { isVerified: true })
+
+        res.status(200)
+            .json({
+                success: true,
+                message: "user verified successfully",
+                updatedUser: updatedUser
+            })
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
+    }
 }
 
+// DONE and tested
 const updateuser = async (req, res) => {
     const { id } = req.params
     const { name, mobile, bio, DOB } = req.body
-    const { path } = req.file
+    // const { path } = req.file
     // const { avatar } = req.file
 
     if (!name && !mobile && !bio && !DOB)
@@ -192,7 +226,7 @@ const updateuser = async (req, res) => {
             })
 
     try {
-        const user = User.findById(id)
+        const user = await User.findById(id)
         if (!user)
             res.status(400)
                 .json({
@@ -200,8 +234,9 @@ const updateuser = async (req, res) => {
                     message: "user not found"
                 })
 
+
         let imageURL = ""
-        if (path) {
+        if (req.file) {
             // upload image on cloudinary
             let imagePath = req.file.path
             imageURL = await uploadOnCloudinary(imagePath)
@@ -231,8 +266,9 @@ const updateuser = async (req, res) => {
         user.mobile = mobile || user.mobile
         user.bio = bio || user.bio
         user.DOB = DOB || user.DOB
-        user.avatar = req.file.path || user.avatar
-        user.save()
+        user.avatar = imageURL || user.avatar
+
+        await user.save()
 
         // -> use this when changes are not conditonal
         // -> database calls : 1
@@ -257,15 +293,27 @@ const updateuser = async (req, res) => {
                 user: user
             })
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
     }
 }
 
+// DONE and tested
 const logoutuser = (req, res) => {
-    // business logic for logging out a user
-    res.send('user logged out successfully');
+
+    res
+        .cookie('token', "")
+        .status(200)
+        .json({
+            success: true,
+            message: "user logged out successfully"
+        })
+
 }
 
+// DONE and tested
 const loginuser = async (req, res) => {
     // 1. access token using JWT
     // 2. refresh token using JWT
@@ -282,7 +330,8 @@ const loginuser = async (req, res) => {
 
     try {
         // 2. check if user exists
-        const user = await User.findOne({ email: 'nikhil@gmail.com' })
+        const user = await User.findOne({ email: email })
+            .select('-__v -password')
         if (!user)
             res.status(400)
                 .json({
@@ -299,8 +348,21 @@ const loginuser = async (req, res) => {
                     message: "incorrect password"
                 })
 
+        const token = await generateToken(email, user.hashedPwd)
+        if (!token)
+            res.status(400)
+                .json({
+                    success: false,
+                    message: "token generation failed"
+                })
+        console.log('token ->', token)
+
         // 4. send response to client
         res.status(200)
+            .cookie('token', token, {
+                httpOnly: true,
+                secure: true,
+            })
             .json({
                 success: true,
                 message: "user logged in successfully",
@@ -310,7 +372,7 @@ const loginuser = async (req, res) => {
         res.status(400)
             .json({
                 success: false,
-                message: error.message
+                message: 'Something went wrong'
             })
     }
 }
@@ -322,5 +384,6 @@ export {
     deleteuser,
     updateuser,
     logoutuser,
-    loginuser
+    loginuser,
+    verifyUser
 };
